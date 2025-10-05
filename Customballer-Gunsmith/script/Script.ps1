@@ -13,6 +13,52 @@ if ($MyInvocation.MyCommand.CommandType -eq "ExternalScript") {
     $scriptDir = Split-Path -Parent (Split-Path -Parent ([System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName))
 }
 
+# === Versionsprüfung ===
+$localVersionPath = Join-Path $PSScriptRoot "version.txt"
+$updateAvailable = $false
+
+try {
+    # Lokale Version lesen
+    if (Test-Path $localVersionPath) {
+        $localVersionRaw = Get-Content $localVersionPath -Raw
+        $localVersion = [version](([string]$localVersionRaw).Trim())
+    }
+    else {
+        Write-Host "Local version.txt not found."
+        return
+    }
+
+    # Remote-Version abrufen (RAW!)
+    $remoteVersionUrl = "https://raw.githubusercontent.com/NOMAECK/Cumstomballer-Gunsmith/main/version.txt"
+
+    try {
+        $remoteVersionRaw = Invoke-RestMethod -Uri $remoteVersionUrl -UseBasicParsing -TimeoutSec 5
+        if ($remoteVersionRaw) {
+            $remoteVersion = [version](([string]$remoteVersionRaw).Trim())            
+            if ($remoteVersion -gt $localVersion) {
+                $updateAvailable = $true
+                Write-Host "Update available! Remote: $remoteVersion | Local: $localVersion"
+            }
+            else {
+                Write-Host "Latest version installed. Remote: $remoteVersion | Local: $localVersion"
+            }
+        }
+    }
+    catch {
+        Write-Host "No internet connection or GitHub not available."
+        $updateAvailable = $false
+    }
+}
+catch {
+    Write-Host "Error during version check: $($_.Exception.Message)"
+    $updateAvailable = $false
+}
+
+
+
+
+
+
 
 # === Form ===
 $form = New-Object System.Windows.Forms.Form
@@ -2033,32 +2079,75 @@ $Yline += $Yplus
 $Ylbl += $Yplus
 $Ycmb += $Yplus
 
-# === Donation ===
+# === Donation / Update Panel ===
 $panelLabelDonation = New-Object System.Windows.Forms.Panel
 $panelLabelDonation.Location = New-Object System.Drawing.Point(($X1lbl),$Ylbl)
 $panelLabelDonation.Size = New-Object System.Drawing.Size($linewidth,65)
-$panelLabelDonation.BorderStyle = "FixedSingle"   # Rahmen sichtbar machen
+$panelLabelDonation.BorderStyle = "FixedSingle"
 $panelLabelDonation.BackColor = [System.Drawing.Color]::White
 $panel.Controls.Add($panelLabelDonation)
 
-$lblDonation = New-Object System.Windows.Forms.Label
-$lblDonation.Text = "You’re not a fan of unpaid work? Then support my amazing tool — buy me a coffee! :)"
-$lblDonation.AutoSize = $true
-$lblDonation.Location = New-Object System.Drawing.Point(155,15)
-$panelLabelDonation.Controls.Add($lblDonation)
+if ($updateAvailable) {
+    # --- Update-Hinweis ---
+    $lblUpdate = New-Object System.Windows.Forms.Label
+    $lblUpdate.Text = "New update available! (v$localVersion → v$remoteVersion)"
+    $lblUpdate.AutoSize = $true
+    $lblUpdate.Font = New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold)
+    $lblUpdate.ForeColor = [System.Drawing.Color]::Red
+    $lblUpdate.Location = New-Object System.Drawing.Point(250,10)
+    $panelLabelDonation.Controls.Add($lblUpdate)
 
-# LinkLabel
-$linkLabel = New-Object System.Windows.Forms.LinkLabel
-$linkLabel.Text = "https://buymeacoffee.com/nomaeck"
-$linkLabel.Location = New-Object System.Drawing.Point(273,35)
-$linkLabel.AutoSize = $true
-$linkLabel.Links[0].LinkData = "https://buymeacoffee.com/nomaeck"
-# Event hinzufügen, damit der Browser geöffnet wird
-$linkLabel.Add_LinkClicked({
-    param($sender, $e)
-    Start-Process $e.Link.LinkData
+    # --- Download-Button ---
+    $btnDownload = New-Object System.Windows.Forms.Button
+    $btnDownload.Text = "Download"
+    $btnDownload.Location = New-Object System.Drawing.Point(320,35)
+    
+       $btnDownload.Add_Click({
+    # Button deaktivieren
+    $btnDownload.Enabled = $false
+    $lblUpdate.Text = "Downloading update..."
+
+    # GUI sauber schließen
+    $Form.Close()
+
+    # Starte das Update-Script in eigenem Prozess
+    $updateScriptPath = Join-Path $scriptDir "script\update.ps1"
+    Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$updateScriptPath`""
+
+    # Haupt-Thread beenden ohne ExitException
+    return
 })
-$panelLabelDonation.Controls.Add($linkLabel)
+
+
+
+
+    
+    $panelLabelDonation.Controls.Add($btnDownload)
+}
+else {
+    # --- Standard Donation ---
+    $lblDonation = New-Object System.Windows.Forms.Label
+    $lblDonation.Text = "You’re not a fan of unpaid work? Then support my amazing tool — buy me a coffee! :)"
+    $lblDonation.AutoSize = $true
+    $lblDonation.Location = New-Object System.Drawing.Point(155,15)
+    $panelLabelDonation.Controls.Add($lblDonation)
+
+    $linkLabel = New-Object System.Windows.Forms.LinkLabel
+    $linkLabel.Text = "https://buymeacoffee.com/nomaeck"
+    $linkLabel.Location = New-Object System.Drawing.Point(273,35)
+    $linkLabel.AutoSize = $true
+    $linkLabel.Links[0].LinkData = "https://buymeacoffee.com/nomaeck"
+    $linkLabel.Add_LinkClicked({
+        param($sender,$e)
+        Start-Process $e.Link.LinkData
+    })
+    $panelLabelDonation.Controls.Add($linkLabel)
+}
+
+
+
+
+
 
 # === Show Form ===
 [void]$form.ShowDialog()

@@ -4,5 +4,5 @@ if not "%1"=="min" (
     exit /b
 )
 set "SCRIPT_DIR=%~dp0"
-powershell.exe -ExecutionPolicy Bypass -NoProfile -File "%SCRIPT_DIR%\script\Script.ps1"
+powershell.exe -File  "%SCRIPT_DIR%\script\Script.ps1"
 exit /b
