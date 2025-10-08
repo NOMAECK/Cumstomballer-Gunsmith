@@ -2111,7 +2111,7 @@ if ($updateAvailable) {
     $Form.Close()
 
     # Starte das Update-Script in eigenem Prozess
-    $updateScriptPath = Join-Path $scriptDir "script\update.ps1"
+    $updateScriptPath = Join-Path $scriptDir "script\newupdate.ps1"
     Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$updateScriptPath`""
 
     # Haupt-Thread beenden ohne ExitException

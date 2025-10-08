@@ -1,5 +1,5 @@
 Instructions:
-1. start "Run-Customballer-Gunsmith.bat"
+1. start "Run-Customballer-Gunsmith.cmd"
 2. Select a pistol you want to replace with your own Customballer Mod
 3. Enter a new name for this weapon
 4. Choose your own Gunparts combination
@@ -27,6 +27,9 @@ You are not allowed to modify and publish the Customballer Gunsmith.
 What does the Customballer Gunsmith?:
 This Powersehll GUI Tool just generating json modfiles for you and zip it into a real mod.
 So you only need to import your self generated customballer mod with simple mod framework.
+If you start the Customballer Gunsmith for the first time or after an update, the script files will be unblocked automatically and it will create the fastmode.flag File.
+On a second start, it won´t unblocked the scripts again, because fastmode.flag exists.
+If an update is available and you press "download", the latest version will be downloaded from GitHub and replaces you current gunsmith files in the same root folder.
 
 Donation:
 All my mods are free. If you'd like to support me, feel free to send me a voluntary donation here: https://buymeacoffee.com/nomaeck.
@@ -34,5 +37,7 @@ If you don't want to support me financially, I would also appreciate an "endorse
 Thank you for your support :)
 
 
-Version:
-1.1
+Changelog:
+V1.1 - fixed small grip safety chrome - changed exe to batch file + ps1 script
+V1.2 - add update function to download the latest versions from GitHub
+v1.3 - changed batch file to cmd - script files will be automatically unblocked on first start - changed update.ps1 to newupdate.ps1 - The first installation after downloaded from Nexus Mods is performed using install.cmd.
