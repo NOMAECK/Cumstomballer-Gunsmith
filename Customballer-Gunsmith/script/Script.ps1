@@ -1330,10 +1330,11 @@ function Set-SelectedVariables {
     }
         "Goldballer" =@{
         Code = "028bcbf4-a0a3-42b5-beaf-163a777164e8"
+        CodeFreelancer = "6eccc7e1-e31b-42de-8f84-b88d8e0032ea"
         LocalizationWeaponHSH = "0072D1A320470342"
         LocalizationTitleHSH = "4120886973"
         LocalizationDesc = "2684972271"
-        Replace = "ICA19 Goldballer"
+        Replace = "ICA19 Goldballer (campaign & freelancer)"
     }
         "Classic Baller" =@{
         Code = "ff340698-bc83-479c-8917-16d99b39406c"
@@ -1369,8 +1370,8 @@ function Set-SelectedVariables {
         LocalizationTitleHSH = "2839309394"
         LocalizationDesc = "4239048192"
         Replace = "ICA19 F/A Stealth"
-    } 
     }
+    } 
 
 
     $BarrelMap = @{
@@ -1644,11 +1645,13 @@ function Set-SelectedVariables {
     # --- Variablen setzen ---
     #Weapon Replace
     #Neuer Code:
-    $selectedWeapon = $cmbWeapon.SelectedItem
+    $global:selectedWeapon = $cmbWeapon.SelectedItem
     $entry = $WeaponMap[$selectedWeapon]
 
     # Weapon-Code setzen
     $global:Weapon = $entry.Code
+    $global:Weaponfreelancer = $entry.CodeFreelancer
+
 
     # Localizations setzen
     $global:localizationWeaponhsh = $entry.LocalizationWeaponHSH
@@ -1956,10 +1959,10 @@ $btnGenerate.Add_Click({
 			"localisationOverrides": {
 			"$localizationWeaponhsh": {
 			"english": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
-			"french": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Pistolet tactique personnalisé, créé avec le Customballer Gunsmith de NOMAECK"},
+			"french": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Pistolet tactique personnalise, cree avec le Customballer Gunsmith de NOMAECK"},
 			"italian": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Pistola tattica personalizzata, creata con Customballer Gunsmith di NOMAECK"},
 			"german": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Taktische Custom-Pistole, erstellt mit NOMAECKs Customballer Gunsmith"},
-			"spanish": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Pistola táctica personalizada, creada con Customballer Gunsmith de NOMAECK"},
+			"spanish": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Pistola tactica personalizada, creada con Customballer Gunsmith de NOMAECK"},
 			"russian": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
 			"chineseSimplified": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
 			"chineseTraditional": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
@@ -1977,8 +1980,8 @@ $btnGenerate.Add_Click({
     "customPaths": []
 }
 "@
-
-
+    #if Goldballer
+    if ($selectedWeapon -eq "Goldballer"){
     Set-Content -Path (Join-Path $modelFolder ("{0}.repository.json" -f $customnameUnderline)) -Value @"
 {
     "$Weapon":{
@@ -1988,7 +1991,7 @@ $btnGenerate.Add_Click({
             $SoundModifier
             "6e197137-e6d3-44c7-bf19-8d59094312f6"
         ],        
-	    "Image":"images/unlockables_override/Customballer.jpg",
+	    "Image":"images/unlockables_override/$customnameUnderline.jpg",
 	    "ModelBodyPartSelections":[$Barrel, $Grip, $Gripcover, $Magazine, $Hammer, $Frame, $Gripsafety, $Rail, $Slide, $Trigger],
 	    "ModelSkinSelections":[$Barrelcolor, $Gripcolor, $Gripcovercolor, $Magazinecolor, $Hammercolor, $Framecolor, $Gripsafetycolor, 0, $Slidecolor, $Triggercolor, 0],
 	    "ModelMuzzleExtensionSelection":$Muzzleextension,
@@ -2008,9 +2011,68 @@ $btnGenerate.Add_Click({
 }
 "@
 
+Set-Content -Path (Join-Path $modelFolder ("{0}freelancer.repository.json" -f $customnameUnderline)) -Value @"
+{
+    "$Weaponfreelancer":{
+        "AppliedModifiers":[
+            $FireMode
+            $MagazineBullets
+            $SoundModifier
+            "6e197137-e6d3-44c7-bf19-8d59094312f6"
+        ],        
+	    "Image":"images/unlockables_override/$customnameUnderline.jpg",
+	    "ModelBodyPartSelections":[$Barrel, $Grip, $Gripcover, $Magazine, $Hammer, $Frame, $Gripsafety, $Rail, $Slide, $Trigger],
+	    "ModelSkinSelections":[$Barrelcolor, $Gripcolor, $Gripcovercolor, $Magazinecolor, $Hammercolor, $Framecolor, $Gripsafetycolor, 0, $Slidecolor, $Triggercolor, 0],
+	    "ModelMuzzleExtensionSelection":$Muzzleextension,
+	    "ModelMuzzleExtensionSkinSelection":$Muzzleextensioncolor,
+	    "ModelScopeSelection":$Scope,
+	    "ModelScopeSkinSelection":$Scopecolor,
+        "Perks": [
+		        $FullAuto
+		        $Sound
+		        "steadyaim"
+	    ],
+        "AudioHeadType": "$AudioHeadType",
+        "AudioTailType": "$AudioTailType",
+        "AudioWeaponFamily": "$AudioWeaponFamily",
+        "HudIcon": "$Icon"
+	}
+}
+"@
+}else {
+    #alle anderen Waffen:
+ Set-Content -Path (Join-Path $modelFolder ("{0}.repository.json" -f $customnameUnderline)) -Value @"
+{
+    "$Weapon":{
+        "AppliedModifiers":[
+            $FireMode
+            $MagazineBullets
+            $SoundModifier
+            "6e197137-e6d3-44c7-bf19-8d59094312f6"
+        ],        
+	    "Image":"images/unlockables_override/$customnameUnderline.jpg",
+	    "ModelBodyPartSelections":[$Barrel, $Grip, $Gripcover, $Magazine, $Hammer, $Frame, $Gripsafety, $Rail, $Slide, $Trigger],
+	    "ModelSkinSelections":[$Barrelcolor, $Gripcolor, $Gripcovercolor, $Magazinecolor, $Hammercolor, $Framecolor, $Gripsafetycolor, 0, $Slidecolor, $Triggercolor, 0],
+	    "ModelMuzzleExtensionSelection":$Muzzleextension,
+	    "ModelMuzzleExtensionSkinSelection":$Muzzleextensioncolor,
+	    "ModelScopeSelection":$Scope,
+	    "ModelScopeSkinSelection":$Scopecolor,
+        "Perks": [
+		        $FullAuto
+		        $Sound
+		        "steadyaim"
+	    ],
+        "AudioHeadType": "$AudioHeadType",
+        "AudioTailType": "$AudioTailType",
+        "AudioWeaponFamily": "$AudioWeaponFamily",
+        "HudIcon": "$Icon"
+	}
+}
+"@
+}
     # Bild kopieren
     $sourceImage = Join-Path $scriptDir "images\customballer.jpg"
-    $destImage   = Join-Path $blobsFolder "customballer.jpg"
+    $destImage   = Join-Path $blobsFolder "$customnameUnderline.jpg"
     if (Test-Path $sourceImage) { Copy-Item -Path $sourceImage -Destination $destImage -Force }
     if (-not (Test-Path $sourceImage)) {[System.Windows.Forms.MessageBox]::Show("You deleted Customballer.jpg from Customballer_Gunsmith\images folder. Do not delete Customballer Gunsmith files! Restore the files, otherwise your Customballer mods will not work fully!")
     }

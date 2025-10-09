@@ -49,6 +49,14 @@ if (Test-Path $updateold) {
     Write-Output "update.ps1 wurde gelöscht."
 }
 
+# === Batch löschen, falls vorhanden ===
+$batchold = Join-Path $scriptDir "Run-Customballer-Gunsmith.bat"
+if (Test-Path $batchold) {
+    Remove-Item -Path $batchold -Force
+    Write-Output "Run-Customballer-Gunsmith.bat wurde gelöscht."
+}
+
+
 # === installREADME löschen ===
 $installReadme = Join-Path $scriptDir "installREADME.txt"
 if (Test-Path $installReadme) {
