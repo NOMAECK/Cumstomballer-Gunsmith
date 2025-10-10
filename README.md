@@ -36,3 +36,6 @@ v1.3
 v1.4
 - fixed that all customballers has the same picture. If you generate now a new customballer it will has it own picture, after you replaced it with a screenshot of your gun (don´t change the name)
 - If you generate a Goldballer it will replace also now the freelancer Goldballer
+
+v1.5
+- added "Striker V3, "El Matador", "ICA19 F/A Stealth Ducky Edition", "Black Trinity", "Red Trinity", "White Trinity", "The Purple Streak ICA19","The Cherry Blossom Baller", "The Concrete Bunny Pistol", "The Floral Baller" and Customballer Gunsmith version number
