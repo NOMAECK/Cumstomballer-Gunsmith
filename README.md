@@ -21,6 +21,7 @@ Thank you for your support :)
 
 
 Changelog:
+
 V1.1 
 - fixed small grip safety chrome - changed exe to batch file + ps1 script
 
