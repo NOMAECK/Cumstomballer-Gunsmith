@@ -28,7 +28,7 @@ V1.2
 v1.3
 - changed batch file to cmd - script files will be automatically unblocked on first start 
 - changed update.ps1 to newupdate.ps1
-- - The first installation after downloaded from Nexus Mods is performed using install.cmd.
+- The first installation after downloaded from Nexus Mods is performed using install.cmd.
 v1.4
 - fixed that all customballers has the same picture. If you generate now a new customballer it will has it own picture, after you replaced it with a screenshot of your gun (don´t change the name)
 - If you generate a Goldballer it will replace also now the freelancer Goldballer
