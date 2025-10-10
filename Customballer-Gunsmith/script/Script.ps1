@@ -117,13 +117,20 @@ $panel.Add_MouseMove({
     }
 })
 
-# === 1. created ===
+# === 0. created + Version ===
 $lblcreated = New-Object System.Windows.Forms.Label
 $lblcreated.Text = "created by NOMAECK"
 $lblcreated.Location = New-Object System.Drawing.Point(662,866)
 $lblcreated.AutoSize = $true
 $lblcreated.ForeColor = [System.Drawing.Color]::DimGray
 $panel.Controls.Add($lblcreated)
+
+$lblversion = New-Object System.Windows.Forms.Label
+$lblversion.Text = "v$localVersion"
+$lblversion.Location = New-Object System.Drawing.Point(7,866)
+$lblversion.AutoSize = $true
+$lblversion.ForeColor = [System.Drawing.Color]::DimGray
+$panel.Controls.Add($lblversion)
 
 
 
@@ -150,8 +157,18 @@ $cmbWeapon.Items.AddRange(@(
     "Classic Baller",
     "Shortballer",
     "Striker",
+    "Striker V3",
+    "El Matador",
     "ICA19 F/A",
-    "ICA19 F/A Stealth"
+    "ICA19 F/A Stealth",
+    "ICA19 F/A Stealth Ducky Edition",
+    "Black Trinity",
+    "Red Trinity",
+    "White Trinity",
+    "The Purple Streak ICA19",
+    "The Cherry Blossom Baller",
+    "The Concrete Bunny Pistol",
+    "The Floral Baller"
 ))
 $panel.Controls.Add($cmbWeapon)
 
@@ -1357,6 +1374,20 @@ function Set-SelectedVariables {
         LocalizationDesc = "466950130"
         Replace = "Striker"
     }
+    "Striker V3" = @{
+        Code = "6576f6aa-8d77-48f1-a4c7-f57fb5ddcc51"
+        LocalizationWeaponHSH = "006986A5A3F98191"
+        LocalizationTitleHSH = "2058437330"
+        LocalizationDesc = "791122048"
+        Replace = "Striker V3"
+    }
+    "El Matador" = @{
+        Code = "77ecaad6-652f-480d-b365-cdf90820a5ec"
+        LocalizationWeaponHSH = "0072D1A320470342"
+        LocalizationTitleHSH = "2327460968"
+        LocalizationDesc = "3744263738"
+        Replace = "El Matador"
+    }
     "ICA19 F/A" =@{
         Code = "be4e7b4e-d895-47c1-979d-d79bfbe79a02"
         LocalizationWeaponHSH = "0072D1A320470342"
@@ -1370,6 +1401,62 @@ function Set-SelectedVariables {
         LocalizationTitleHSH = "2839309394"
         LocalizationDesc = "4239048192"
         Replace = "ICA19 F/A Stealth"
+    }
+    "ICA19 F/A Stealth Ducky Edition" =@{
+        Code = "256ac829-2ec6-44de-8d5f-16801a0491df"
+        LocalizationWeaponHSH = "006986A5A3F98191"
+        LocalizationTitleHSH = "585698583"
+        LocalizationDesc = "2004868933"
+        Replace = "ICA19 F/A Stealth Ducky Edition"
+    }
+     "Black Trinity" =@{
+        Code = "563e5651-3024-4dc8-9063-93030a670ca3"
+        LocalizationWeaponHSH = "006986A5A3F98191"
+        LocalizationTitleHSH = "2168467540"
+        LocalizationDesc = "3570852358"
+        Replace = "Black Trinity"
+    }
+     "White Trinity" =@{
+        Code = "cfa664fc-e583-4ad5-ade5-2f746d8656ca"
+        LocalizationWeaponHSH = "006986A5A3F98191"
+        LocalizationTitleHSH = "1152286900"
+        LocalizationDesc = "288903910"
+        Replace = "White Trinity"
+    }
+     "Red Trinity" =@{
+        Code = "fca954f6-40b1-448d-b4a8-0c543e521cc3"
+        LocalizationWeaponHSH = "006986A5A3F98191"
+        LocalizationTitleHSH = "4287068859"
+        LocalizationDesc = "2853284073"
+        Replace = "Red Trinity"
+    }
+     "The Purple Streak ICA19" =@{
+        Code = "5b497a01-7941-474f-ac36-2b0490b528a4"
+        LocalizationWeaponHSH = "006986A5A3F98191"
+        LocalizationTitleHSH = "3326048998"
+        LocalizationDesc = "2477369524"
+        Replace = "The Purple Streak ICA19"
+    }
+     "The Cherry Blossom Baller" =@{
+        Code = "4c9e7f92-c104-4587-8053-35e08f494110"
+        LocalizationWeaponHSH = "006986A5A3F98191"
+        LocalizationTitleHSH = "3089544667"
+        LocalizationDesc = "3987761033"
+        Replace = "The Cherry Blossom Baller"
+    }
+    "The Concrete Bunny Pistol" =@{
+        Code = "c54ca8c7-8c29-4909-8390-3587e9747361"
+        LocalizationWeaponHSH = "006986A5A3F98191"
+        LocalizationTitleHSH = "80972231"
+        LocalizationDesc = "1363499925"
+        Replace = "The Concrete Bunny Pistol"
+    }
+    "The Floral Baller" =@{
+        Code = "2dfacef2-57f6-4b8d-a1ae-f1f7ada4ec22"
+        LocalizationWeaponHSH = "0072D1A320470342"
+        LocalizationTitleHSH = "3287482919"
+        LocalizationDesc = "2523254901"
+        Replace = "The Floral Baller"
     }
     } 
 
@@ -1929,12 +2016,12 @@ $btnGenerate.Add_Click({
     New-Item -ItemType Directory -Force -Path $blobsFolder | Out-Null
     New-Item -ItemType Directory -Force -Path $modelFolder | Out-Null
 
-    # Platzhalter-Dateien
-    #Manifest.json
-    $schema = '$schema'
-
     # Customname ohne Leerzeichen erzeugen
     $customnameNoSpaces = $customname -replace '\s',''
+
+    #Manifest.json
+    $schema = '$schema'
+      
 
     
     Set-Content -Path (Join-Path $baseFolder "manifest.json") -Value @"
