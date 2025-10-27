@@ -55,16 +55,47 @@ catch {
 }
 
 
-
-
-
-
-
 # === Form ===
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Customballer Gunsmith"
 $form.Size = New-Object System.Drawing.Size(801,925)
 $form.StartPosition = "CenterScreen"
+# === Menüleiste erstellen ===
+$menu = New-Object System.Windows.Forms.MenuStrip
+$menu.RenderMode = [System.Windows.Forms.ToolStripRenderMode]::System
+
+
+# Menü "Tool"
+$ToolMenu = New-Object System.Windows.Forms.ToolStripMenuItem
+$ToolMenu.Text = "Tool"
+
+# Menüpunkt "Close"
+$exitItem = New-Object System.Windows.Forms.ToolStripMenuItem
+$exitItem.Text = "Close"
+$exitItem.Add_Click({ $form.Close() })
+[void]$ToolMenu.DropDownItems.Add($exitItem)
+
+# Menü "Import"
+$ImportMenu = New-Object System.Windows.Forms.ToolStripMenuItem
+$ImportMenu.Text = "Import"
+
+# Menü "Merge"
+$MergeMenu = New-Object System.Windows.Forms.ToolStripMenuItem
+$MergeMenu.Text = "Merge"
+$mergePath = Join-Path $scriptDir "script\modpack.ps1"
+$MergeMenu.Add_Click({
+    Start-Process powershell.exe -ArgumentList "-ExecutionPolicy Bypass -NoProfile -File `"$mergePath`""
+})
+
+
+# Menüs zur Menüleiste hinzufügen
+[void]$menu.Items.Add($ToolMenu)
+[void]$menu.Items.Add($ImportMenu)
+[void]$menu.Items.Add($MergeMenu)
+
+# Menüleiste dem Formular hinzufügen
+$form.MainMenuStrip = $menu
+[void]$form.Controls.Add($menu)
 
 # === Positions Variabeln ===
 $X1lbl = 30  #Bauteil-Label X Start Position
@@ -75,9 +106,9 @@ $Xcmbsize = 190 #Combobox X Größe
 $Ycmbsize = 30  #Combobox Y Größe
 $lineheight = 2 #Trennlinien Höhe
 $linewidth = 725 #Trennlinien Breite
-$Yline = 62 #Erste Trennlinien Y Startposition
-$Ylbl = 30 #Erste Label Y Startposition
-$Ycmb = 27 #Erste Combobox Y Startposition
+$Yline = 74 #Erste Trennlinien Y Startposition
+$Ylbl = 42 #Erste Label Y Startposition
+$Ycmb = 39 #Erste Combobox Y Startposition
 $Yplus = 50 #50 Pixel
 
 
@@ -86,7 +117,7 @@ $Yplus = 50 #50 Pixel
 $panel = New-Object System.Windows.Forms.Panel
 $panel.Dock = "Fill"          # Füllt das Fenster aus
 $panel.AutoScroll = $true     # Scrollbalken aktivieren
-#$panel.BackColor = [System.Drawing.Color]::Red
+#$panel.BackColor = [System.Drawing.Color]::LightYellow
 $form.Controls.Add($panel)
 
 # ToolTip erstellen
@@ -117,7 +148,7 @@ $panel.Add_MouseMove({
     }
 })
 
-# === 0. created + Version ===
+# === created + Version ===
 $lblcreated = New-Object System.Windows.Forms.Label
 $lblcreated.Text = "created by NOMAECK"
 $lblcreated.Location = New-Object System.Drawing.Point(662,866)
@@ -132,8 +163,14 @@ $lblversion.AutoSize = $true
 $lblversion.ForeColor = [System.Drawing.Color]::DimGray
 $panel.Controls.Add($lblversion)
 
-
-
+#Trennlinie 0
+$line0 = New-Object System.Windows.Forms.Label
+$line0.BorderStyle = "Fixed3D"
+$line0.AutoSize = $false
+$line0.Height = $lineheight
+$line0.Width = 782
+$line0.Location = New-Object System.Drawing.Point(2,24)
+$panel.Controls.Add($line0)
 
 # === 1. Weapon to replace ===
 $lblWeapon = New-Object System.Windows.Forms.Label
@@ -179,10 +216,11 @@ $lblCustomName.Location = New-Object System.Drawing.Point($x2lbl,$Ylbl)
 $lblCustomName.AutoSize = $true
 $panel.Controls.Add($lblCustomName)
 
+
 $txtCustomName = New-Object System.Windows.Forms.TextBox
 $txtCustomName.Location = New-Object System.Drawing.Point($x2cmb,$Ycmb)
 $txtCustomName.Size = New-Object System.Drawing.Size($xcmbsize, $ycmbsize)
-$txtCustomName.MaxLength = 25 
+$txtCustomName.MaxLength = 20
 
 # Eingabe prüfen
 $txtCustomName.Add_KeyPress({
@@ -279,8 +317,9 @@ $cmbFrame.DropDownHeight = "600"
 $cmbFrame.Items.AddRange(@(
     "1911 Standard",
     "Black with Rail",
-    "Black Tomb Raider"
-    #"Spraypaint"
+    "Black Tomb Raider",
+    #"Spraypaint",
+    "Silver more shiny (needs gunpart-pack)"
 ))
 $panel.Controls.Add($cmbFrame)
 
@@ -297,21 +336,21 @@ $cmbFrameColor.Location = New-Object System.Drawing.Point($x2cmb,$Ycmb)
 $cmbFrameColor.Size = New-Object System.Drawing.Size($xcmbsize, $ycmbsize)
 $cmbFrameColor.DropDownStyle = "DropDownList"
 $cmbFrameColor.DropDownHeight = "600"
-$cmbFrameColor.Items.AddRange(@(
-    "black",
-    "silver matt",
-    "silver chrome",
-    "Matador",
-    "gold",
-    "chrome",
-    "black shiny",
-    "tan",
-    "dark chrome",
-    "silver shiny (black safeguard)",
-    "yellow (ducky)",
-    "steel floral",
-    "cherry floral"
-))
+#$cmbFrameColor.Items.AddRange(@(
+   # "black",
+    #"silver matt",
+    #"silver chrome",
+    #"Matador",
+    #"gold",
+    #"grey",
+    #"black shiny",
+    #"tan",
+    #"Brass Chrome",
+    #"silver shiny (black safeguard)",
+    #"yellow (ducky)",
+    #"steel floral",
+    #"cherry floral"
+#))
 $cmbFrameColor.Enabled = $false
 $panel.Controls.Add($cmbFrameColor)
 
@@ -340,12 +379,12 @@ $cmbHammer.Size = New-Object System.Drawing.Size($xcmbsize, $ycmbsize)
 $cmbHammer.DropDownStyle = "DropDownList"
 $cmbHammer.DropDownHeight = "600"
 $cmbHammer.Items.AddRange(@(
-    "Classic Chrome Hammer",
+    "Classic Hammer",
     "Ring Hammer"
 ))
 $panel.Controls.Add($cmbHammer)
 
-# === 4.1 Hammer Color (nur bei Ring Hammer) ===
+# === 4.1 Hammer Color  ===
 $lblHammerColor = New-Object System.Windows.Forms.Label
 $lblHammerColor.Text = "Hammer color:"
 $lblHammerColor.Location = New-Object System.Drawing.Point($x2lbl,$Ylbl)
@@ -442,8 +481,10 @@ $cmbSlide.Items.AddRange(@(
     "Olive Tan",
     "Black Hitman Insignia",
     "Silver shiny dimpled (red sight)",
-    "Black Hexagons"
-    #"Spraypaint"
+    "Black Hexagons",
+    #"Spraypaint",
+    "Classic Insignia (needs gunpart-pack)",
+    "Striker Insignia (needs gunpart-pack)"
 ))
 $panel.Controls.Add($cmbSlide)
 
@@ -640,7 +681,7 @@ $cmbMagazine.Items.AddRange(@(
     "short",
     "short 1911 standard",
     "long 1911",
-    "chrome extended"
+    "silver chrome extended"
 ))
 $panel.Controls.Add($cmbMagazine)
 
@@ -864,7 +905,7 @@ $cmbBarrel.Add_SelectedIndexChanged({
         "short barrel" {
             $cmbBarrelColor.Items.AddRange(@(
                "black",
-               "chrome",
+               "silver chrome",
                "silver matt",
                "gold",
                "grey"
@@ -873,7 +914,7 @@ $cmbBarrel.Add_SelectedIndexChanged({
         "long barrel" {
             $cmbBarrelColor.Items.AddRange(@(
                "black",
-               "chrome",
+               "silver chrome",
                "silver matt"
             ))
         }
@@ -941,10 +982,10 @@ $cmbFrame.Add_SelectedIndexChanged({
                 "silver chrome",
                 "Matador",
                 "gold",
-                "chrome",
+                "grey",
                 "black shiny",
                 "tan",
-                "dark chrome",
+                "Brass Chrome",
                 "silver shiny (black safeguard)",
                 "yellow (ducky)",
                 "steel floral",
@@ -964,13 +1005,24 @@ $cmbHammer.Add_SelectedIndexChanged({
     $cmbHammerColor.Enabled = $true
     $cmbHammerColor.Items.Clear()
 
+
     switch ($cmbHammer.SelectedItem) {
+        "Classic Hammer" {
+            $cmbHammerColor.Items.AddRange(@(
+                "classic silver chrome",
+                #"classic silver chrome 2",
+                "classic black",
+                "warm black (needs gunpart-pack)"               
+            ))
+        }
         "Ring Hammer" {
             $cmbHammerColor.Items.AddRange(@(
                 "black",
-                "chrome",
-                "silver matt"
-                
+                "silver chrome",
+                #"silver matt",
+                "grey",
+                "ducky orange",
+                "gold (needs gunpart-pack)"                
             ))
         }
         default {
@@ -992,14 +1044,14 @@ $cmbTrigger.Add_SelectedIndexChanged({
             $cmbTriggerColor.Items.AddRange(@(
                 "black",
                 "silver matt",
-                "chrome"
+                "silver chrome"
             ))
         }
         "three holes" {
             $cmbTriggerColor.Items.AddRange(@(
                 "black",
                 "silver matt",
-                "chrome",
+                "silver chrome",
                 "gold"
             ))
         }
@@ -1007,7 +1059,7 @@ $cmbTrigger.Add_SelectedIndexChanged({
             $cmbTriggerColor.Items.AddRange(@(
                 "black",
                 "silver matt",
-                "chrome"
+                "silver chrome"
             ))
         }
         default {
@@ -1031,8 +1083,8 @@ $cmbSlide.Add_SelectedIndexChanged({
                 "silver chrome",
                 "gold matador",
                 "gold",
-                "silver shiny kimber",
-                "chrome arrows",
+                "silver more shiny kimber",
+                "silver more shiny arrows",
                 "silver shiny dimpled"
             ))
         }
@@ -1048,6 +1100,21 @@ $cmbSlide.Add_SelectedIndexChanged({
                 "hexagons",
                 "steel floral",
                 "cherry floral"
+            ))
+        }
+        "Striker Insignia (needs gunpart-pack)" {
+            $cmbSlideColor.Items.AddRange(@(
+                "black",
+                "silver shiny",
+                "silver chrome"
+            ))
+        }
+        "Classic Insignia (needs gunpart-pack)" {
+            $cmbSlideColor.Items.AddRange(@(
+                "black",
+                "silver shiny",
+                "silver more shiny",
+                "blue"
             ))
         }
         default {
@@ -1151,7 +1218,7 @@ $cmbGripSafety.Add_SelectedIndexChanged({
             $cmbGripSafetyColor.Items.AddRange(@(
                 "black",
                 "silver matt",
-                "chrome"
+                "silver chrome"
 
 
             ))
@@ -1160,9 +1227,10 @@ $cmbGripSafety.Add_SelectedIndexChanged({
             $cmbGripSafetyColor.Items.AddRange(@(
                 "black",
                 "silver matt",
-                "chrome",
+                "silver chrome",
                 "gold",
-                "black blue"
+                "black blue",
+                "ducky"
             ))
         }
         default {
@@ -1182,22 +1250,22 @@ $cmbMagazine.Add_SelectedIndexChanged({
         "Short" {
             $cmbMagazineColor.Items.AddRange(@(
                     "black",
-                    "chrome",
+                    "silver chrome",
                     "silver matt"
             ))
         }
         "short 1911 standard" {
             $cmbMagazineColor.Items.AddRange(@(
                 "black",
-                    "chrome",
-                    "silver matt",
-                    "gold"
+                "silver chrome",
+                "silver matt",
+                "gold"
             ))
         }
         "long 1911" {
             $cmbMagazineColor.Items.AddRange(@(
                 "black",
-                "chrome",
+                "silver chrome",
                 "silver matt",
                 "black hexagons"
             ))
@@ -1218,24 +1286,31 @@ $cmbMuzzleExtension.Add_SelectedIndexChanged({
     switch ($cmbMuzzleExtension.SelectedItem) {
         "Striker compensator" {
             $cmbMuzzleExtensionColor.Items.AddRange(@(
-                "chrome",
-                "silver shiny"
+                "silver chrome",
+                "silver more shiny",
+                "black (needs gunpart-pack)"
             ))
         }
         "Round Suppressor" {
             $cmbMuzzleExtensionColor.Items.AddRange(@(
                 "black (white text)",
-                "silver chrome",
+                "silver chrome ",
                 "black (black text)",
                 "gold",
                 "black floral",
                 "cherry floral"
             ))
         }
+        "Short round Suppressor" {
+            $cmbMuzzleExtensionColor.Items.AddRange(@(
+                "black blue",
+                "black (needs gunpart-pack)"
+            ))
+        }
         "Striker compensator 2 (more holes)" {
             $cmbMuzzleExtensionColor.Items.AddRange(@(
-                "chrome ",
-                "silver matt"
+                "silver chrome  ",
+                "silver shiny"
             ))
         }
         default {
@@ -1351,7 +1426,7 @@ function Set-SelectedVariables {
         LocalizationWeaponHSH = "0072D1A320470342"
         LocalizationTitleHSH = "4120886973"
         LocalizationDesc = "2684972271"
-        Replace = "ICA19 Goldballer (campaign & freelancer)"
+        Replace = "ICA19 Goldballers"
     }
         "Classic Baller" =@{
         Code = "ff340698-bc83-479c-8917-16d99b39406c"
@@ -1468,7 +1543,7 @@ function Set-SelectedVariables {
 
     $BarrelColorMap = @{
         "black"       = "0"
-        "chrome"      = "1"
+        "silver chrome"      = "1"
         "silver matt" = "2"
         "gold"        = "3"
         "grey"  = "4"
@@ -1479,6 +1554,7 @@ function Set-SelectedVariables {
         "Black with Rail"   = "1"
         "Black Tomb Raider" = "3"
         "Spraypaint"        = "4"
+        "Silver more shiny (needs gunpart-pack)" = "5"
     }
 
     $FrameColorMap = @{
@@ -1487,10 +1563,10 @@ function Set-SelectedVariables {
         "Silver Chrome"             = "2"
         "Matador"                   = "3"
         "Gold"                      = "4"
-        "Chrome"                    = "5"
+        "grey"                      = "5"
         "Black shiny"               = "6"
         "Tan"                       = "7"
-        "dark chrome"               = "8"
+        "Brass Chrome"              = "8"
         "Silver Shiny (black safeguard)" = "9"
         "Yellow (ducky)"            = "10"
         "Steel Floral"              =  "11"
@@ -1499,16 +1575,22 @@ function Set-SelectedVariables {
     }
 
     $HammerMap = @{
-        "Classic Chrome Hammer" =  "0"
+        "Classic Hammer" =  "0"
         "Ring Hammer"           =  "1"
     }
 
     $HammerColorMap = @{
-        "black"       =  "0"
-        "chrome"      =  "1"
-        "silver matt" =  "2"
-        "gold"        =  "3"
-        ""            =  "0"
+        "black"         =  "0"
+        "silver chrome" =  "1"
+        "silver matt"   =  "2"
+        "grey" = "3"
+        "ducky orange"  = "4"
+        "gold (needs gunpart-pack)" =  "5"
+
+        "classic silver chrome" = "0"
+        "classic silver chrome 2" = "1"
+        "classic black" = "2"
+        "warm black (needs gunpart-pack)" = "3"
     }
 
     $TriggerMap = @{
@@ -1520,7 +1602,7 @@ function Set-SelectedVariables {
 
     $TriggerColorMap = @{
         "black"       = "0"
-        "chrome"      = "1"
+        "silver chrome"      = "1"
         "silver matt" = "2"
         "gold"        = "3"
         "black blue"            = "4"
@@ -1537,6 +1619,9 @@ function Set-SelectedVariables {
         "Silver shiny dimpled (red sight)" = "7"
         "Black Hexagons"       = "8"
         "Spraypaint"                   = "9"
+        "Classic Insignia (needs gunpart-pack)" = "10"
+        "Striker Insignia (needs gunpart-pack)" = "11"
+
     }
 
     $SlideColorMap = @{
@@ -1545,15 +1630,16 @@ function Set-SelectedVariables {
         "silver chrome"                = "2"
         "gold matador"                 = "3"
         "gold"                         = "4"
-        "silver shiny kimber"          = "5"
-        "chrome arrows"                = "6"
+        "silver more shiny kimber"     = "5"
+        "silver more shiny arrows"     = "6"
         "silver shiny dimpled"         = "7"
         "silver shiny"                 = "1"
         "black kimber big hitman insignia" = "0"
         "hexagons"                     = "1"
         "steel floral"                 = "2"
         "cherry floral"                = "3"
-        ""                             = "0"
+        "silver more shiny"            = "2"
+        "blue"                         = "3"
     }
 
         $GripMap = @{
@@ -1606,22 +1692,23 @@ function Set-SelectedVariables {
 
     $GripSafetyColorMap = @{
         "black"      = "0"
-        "chrome"     = "1"
+        "silver chrome"     = "1"
         "silver matt"= "2"
         "gold"       = "3"
         "black blue" = "4"
+        "ducky"      = "5"
     }
 
     $MagazineMap = @{
         "short"              = "0"
         "short 1911 standard"= "1"
         "long 1911"               = "2"
-        "chrome extended"          = "3"
+        "silver chrome extended"          = "3"
     }
 
     $MagazineColorMap = @{
         "black"      = "0"
-        "chrome"     = "1"
+        "silver chrome"     = "1"
         "silver matt"= "2"
         "gold"       = "3"
         "black blue" = "4"
@@ -1646,20 +1733,26 @@ function Set-SelectedVariables {
     # === Mapping: Muzzle Extension Colors ===
     $MuzzleExtensionColorMap = @{
         # Striker compensator
-        "chrome"         = "0"
-        "Silver shiny"   = "1"
+        "silver chrome"         = "0"
+        "Silver more shiny"   = "1"
 
         # Round Suppressor
         "black (white text)" = "0"
-        "silver chrome"      = "1"
+        "silver chrome "     = "1"
         "black (black text)" = "2"
         "gold"               = "3"
         "black floral"       = "4"
         "cherry floral"      = "5"
 
+        #short round suppressor
+        "black blue" = "0"
+        "black (needs gunpart-pack)" = "2"
+
         # Striker compensator 2
-        "chrome "       = "0"
-        "Silver matt"   = "1"
+        "silver chrome  "       = "0"
+        "Silver shiny"   = "1"
+
+        
     }
     
     # === Mapping: Gun Sound Perk ===
@@ -1846,7 +1939,7 @@ function Set-SelectedVariables {
     if ($cmbMagazine.SelectedItem -eq "long 1911") { 
         $global:MagazineBullets = '"33649882-efae-40f5-a57b-2380794038ca",'
     }
-    if ($cmbMagazine.SelectedItem -eq "chrome extended") { 
+    if ($cmbMagazine.SelectedItem -eq "silver chrome extended") { 
         $global:MagazineBullets = '"ed35305b-1d03-42f9-9e5f-e246d85fcab6",'
     } 
     if ($cmbMagazine.SelectedItem -like "*short*") { 
@@ -1967,6 +2060,92 @@ function Set-SelectedVariables {
 
 }
 
+# === Import-Button Click Event ===
+$ImportMenu.Add_Click({
+        try {
+        # Basisverzeichnis
+        $modsPath = Join-Path $scriptDir "customballer-mods"
+
+        Add-Type -AssemblyName System.Windows.Forms
+
+        # Datei-Dialog für ZIP oder gunsmithImport.txt
+        $dialog = New-Object System.Windows.Forms.OpenFileDialog
+        $dialog.InitialDirectory = $modsPath
+        $dialog.Filter = "ZIP and Gunsmith Import (*.zip;gunsmithImport.txt)|*.zip;gunsmithImport.txt|All Files (*.*)|*.*"
+        $dialog.Title = "Choose a Customballer Mod (ZIP) or gunsmithImport.txt"
+        $dialog.Multiselect = $false
+
+        $selectedPath = $null
+        if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+            $selectedPath = $dialog.FileName
+        } else { return }
+
+        # === Temp-Verzeichnis unter $scriptDir\customballer-mods\temp
+        $tempRoot = Join-Path $scriptDir "customballer-mods\temp"
+        if (-not (Test-Path $tempRoot)) { New-Item -Path $tempRoot -ItemType Directory | Out-Null }
+        $tempDir = Join-Path $tempRoot ("import_" + [guid]::NewGuid().ToString("N"))
+        New-Item -Path $tempDir -ItemType Directory | Out-Null
+
+        # === Prüfen Dateityp
+        $gunsmithFile = $null
+        if ($selectedPath.ToLower().EndsWith(".zip")) {
+            # ZIP entpacken
+            Write-Host "📦 ZIP erkannt: $selectedPath" -ForegroundColor Cyan
+            Expand-Archive -Path $selectedPath -DestinationPath $tempDir -Force
+            # gunsmithImport.txt im ZIP suchen
+            $gunsmithFile = Get-ChildItem -Path $tempDir -Filter "gunsmithImport.txt" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+            if (-not $gunsmithFile) {
+                [System.Windows.Forms.MessageBox]::Show("⚠️ Keine gunsmithImport.txt im ZIP gefunden.", "Import-Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning)
+                return
+            }
+        }
+        elseif ($selectedPath.ToLower().EndsWith("gunsmithimport.txt")) {
+            # Direkt Datei auswählen
+            Write-Host "📄 gunsmithImport.txt erkannt: $selectedPath" -ForegroundColor Cyan
+            $gunsmithFile = Get-Item $selectedPath
+        }
+        else {
+            [System.Windows.Forms.MessageBox]::Show("⚠️ Bitte wähle eine ZIP-Datei oder gunsmithImport.txt aus.", "Import-Fehler", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning)
+            return
+        }
+
+        # === Dateiinhalt lesen und UI setzen ===
+        $content = Get-Content -Path $gunsmithFile.FullName -Raw
+        $pattern = '^\s*\$(?<ctrl>[A-Za-z0-9_]+)\.(?<prop>[A-Za-z0-9_]+)\s*=\s*"(?<val>[^"]*)"\s*$'
+
+        foreach ($line in $content -split "`r?`n") {
+            if ($line -match $pattern) {
+                $ctrl = $matches['ctrl']
+                $prop = $matches['prop']
+                $val  = $matches['val']
+
+                if (Get-Variable -Name $ctrl -ErrorAction SilentlyContinue) {
+                    $uiElement = Get-Variable -Name $ctrl -ValueOnly
+                    try { $uiElement.$prop = $val } catch { Write-Host "⚠️ Konnte $ctrl.$prop nicht setzen: $val" -ForegroundColor Yellow }
+                } else {
+                    Write-Host "⚠️ Kein UI-Element '$ctrl' gefunden." -ForegroundColor DarkYellow
+                }
+            }
+        }
+
+        [System.Windows.Forms.MessageBox]::Show("✅ Gunsmith-Import loaded.", "Import successful", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+    }
+    catch {
+        [System.Windows.Forms.MessageBox]::Show("❌ Fehler: $($_.Exception.Message)", "Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
+    }
+    finally {
+    if ($null -ne $tempDir -and (Test-Path $tempDir)) {
+        try {
+            Remove-Item $tempRoot -Recurse -Force -ErrorAction SilentlyContinue
+        } catch {
+            Write-Host "⚠️ Temp cleanup failed: $($_.Exception.Message)" -ForegroundColor DarkYellow
+        }
+    }
+}
+})
+
+
+
 # === Generate-Mod-Button ===
 $btnGenerate = New-Object System.Windows.Forms.Button
 $btnGenerate.Text = "Generate Mod"
@@ -1998,12 +2177,19 @@ $btnGenerate.Add_Click({
         return
     }
 
-        # === Variablen setzen ===
+    # === Variablen setzen ===
     Set-SelectedVariables
 
     # === Ordner-Struktur bauen ===
     # === Customname mit Underline erzeugen ===
     $customnameUnderline = $customname -replace '\s','_'
+    # === Customname ohne Leerzeichen erzeugen ===
+    $customnameNoSpaces = $customname -replace '\s',''
+    # === Replace Name mit Underline erzeugen ===
+    $replaceUnderline = $replace -replace '\s','_'
+
+
+
     # $scriptDir wurde oben ermittelt
     $modsDir   = Join-Path $scriptDir "Customballer-Mods"
 
@@ -2011,22 +2197,19 @@ $btnGenerate.Add_Click({
 
     $baseFolder = Join-Path $modsDir ("{0}_CBG_NOMAECK" -f $customnameUnderline)
     $blobsFolder = Join-Path $baseFolder "blobs\images\unlockables_override"
-    $modelFolder = Join-Path $baseFolder ("{0}\Model\chunk0" -f $customnameUnderline)
+    $modelFolder = Join-Path $baseFolder ("{0}\{1}\Model\chunk0" -f $replaceUnderline, $customnameUnderline)
 
     New-Item -ItemType Directory -Force -Path $blobsFolder | Out-Null
     New-Item -ItemType Directory -Force -Path $modelFolder | Out-Null
 
-    # Customname ohne Leerzeichen erzeugen
-    $customnameNoSpaces = $customname -replace '\s',''
+
 
     #Manifest.json
     $schema = '$schema'
-      
-
-    
+          
     Set-Content -Path (Join-Path $baseFolder "manifest.json") -Value @"
 {
- 	"$schema": "https://raw.githubusercontent.com/atampy25/simple-mod-framework/main/Mod%20Manager/src/lib/manifest-schema.json",	
+ 	"`$schema": "https://raw.githubusercontent.com/atampy25/simple-mod-framework/main/Mod%20Manager/src/lib/manifest-schema.json",	
 	"id": "${customnameNoSpaces}.CBG_NOMAECK",
 	"name": "${customnameUnderline}_CBG_NOMAECK",
 	"description": "User self created Customballer that replaces $replace, created with NOMAECK's Customballer Gunsmith",
@@ -2037,12 +2220,12 @@ $btnGenerate.Add_Click({
 	"thumbs": ["ConsoleCmd OnlineResources_Disable 1"],
 	"options":[
 		{
-			"group": "$customnameUnderline",
+			"group": "$replaceUnderline",
 			"name": "$customname",
 			"type": "checkbox",
 			"enabledByDefault": true,
-			"image": "blobs/images/unlockables_override/Customballer.jpg",
-			"contentFolders": ["$customnameUnderline/Model"],
+			"image": "blobs/images/unlockables_override/$customnameUnderline.jpg",
+			"contentFolders": ["$replaceUnderline/$customnameUnderline/Model"],
 			"localisationOverrides": {
 			"$localizationWeaponhsh": {
 			"english": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
@@ -2059,6 +2242,64 @@ $btnGenerate.Add_Click({
 		}
         ]
 }
+"@
+
+    #Manifestimport.txt          
+    Set-Content -Path (Join-Path $modelFolder "manifestimport.txt") -Value @"
+		{
+			"group": "$replaceUnderline",
+			"name": "$customname",
+            "tooltip": "Changes $replaceUnderline model to $customname",
+			"type": "select",
+			"enabledByDefault": false,
+			"image": "blobs/images/unlockables_override/$customnameUnderline.jpg",
+			"contentFolders": ["$replaceUnderline/$customnameUnderline/Model"],
+			"localisationOverrides": {
+			"$localizationWeaponhsh": {
+			"english": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
+			"french": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Pistolet tactique personnalise, cree avec le Customballer Gunsmith de NOMAECK"},
+			"italian": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Pistola tattica personalizzata, creata con Customballer Gunsmith di NOMAECK"},
+			"german": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Taktische Custom-Pistole, erstellt mit NOMAECKs Customballer Gunsmith"},
+			"spanish": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Pistola tactica personalizada, creada con Customballer Gunsmith de NOMAECK"},
+			"russian": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
+			"chineseSimplified": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
+			"chineseTraditional": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"},
+			"japanese": {"$localizationTitleHSH": "$customname", "$LocalizationDesc": "Tactical custom pistol, created with NOMAECK's Customballer Gunsmith"}
+					}
+				}
+		}
+"@
+
+    #GunsmithImport.txt          
+    Set-Content -Path (Join-Path $modelFolder "gunsmithImport.txt") -Value @"
+        `$cmbWeapon.SelectedItem = "$($cmbWeapon.selectedItem)"
+        `$txtCustomName.Text     = "$($txtCustomName.Text)"
+        `$cmbBarrel.SelectedItem = "$($cmbBarrel.selectedItem)"
+        `$cmbBarrelColor.SelectedItem = "$($cmbBarrelColor.selectedItem)"
+        `$cmbFrame.SelectedItem = "$($cmbFrame.selectedItem)"
+        `$cmbFrameColor.SelectedItem = "$($cmbFrameColor.selectedItem)"
+        `$cmbHammer.SelectedItem = "$($cmbHammer.selectedItem)"
+        `$cmbHammerColor.SelectedItem = "$($cmbHammerColor.selectedItem)"
+        `$cmbTrigger.SelectedItem = "$($cmbTrigger.selectedItem)"
+        `$cmbTriggerColor.SelectedItem = "$($cmbTriggerColor.selectedItem)"
+        `$cmbSlide.SelectedItem = "$($cmbSlide.selectedItem)"
+        `$cmbSlideColor.SelectedItem = "$($cmbSlideColor.selectedItem)"
+        `$cmbGrip.SelectedItem = "$($cmbGrip.selectedItem)"
+        `$cmbGripColor.SelectedItem = "$($cmbGripColor.selectedItem)"
+        `$cmbGripCover.SelectedItem = "$($cmbGripCover.selectedItem)"
+        `$cmbGripCoverColor.SelectedItem = "$($cmbGripCoverColor.selectedItem)"
+        `$cmbGripSafety.SelectedItem = "$($cmbGripSafety.selectedItem)"
+        `$cmbGripSafetyColor.SelectedItem = "$($cmbGripSafetyColor.selectedItem)"
+        `$cmbMagazine.SelectedItem = "$($cmbMagazine.selectedItem)"
+        `$cmbMagazineColor.SelectedItem = "$($cmbMagazineColor.selectedItem)"
+        `$cmbMuzzleExtension.SelectedItem = "$($cmbMuzzleExtension.selectedItem)"
+        `$cmbMuzzleExtensionColor.SelectedItem = "$($cmbMuzzleExtensionColor.selectedItem)"
+        `$cmbSound.SelectedItem = "$($cmbSound.selectedItem)"
+        `$cmbSoundStyle.SelectedItem = "$($cmbSoundStyle.selectedItem)"
+        `$cmbScope.SelectedItem = "$($cmbScope.selectedItem)"
+        `$cmbScopeColor.SelectedItem = "$($cmbScopeColor.selectedItem)"
+        `$cmbfiremode.SelectedItem = "$($cmbfiremode.selectedItem)"
+
 "@
     
     #Project.json
@@ -2098,7 +2339,7 @@ $btnGenerate.Add_Click({
 }
 "@
 
-Set-Content -Path (Join-Path $modelFolder ("{0}freelancer.repository.json" -f $customnameUnderline)) -Value @"
+Set-Content -Path (Join-Path $modelFolder ("{0}2.repository.json" -f $customnameUnderline)) -Value @"
 {
     "$Weaponfreelancer":{
         "AppliedModifiers":[
