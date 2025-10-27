@@ -1287,7 +1287,7 @@ $cmbMuzzleExtension.Add_SelectedIndexChanged({
         "Striker compensator" {
             $cmbMuzzleExtensionColor.Items.AddRange(@(
                 "silver chrome",
-                "silver more shiny",
+                "silver shiny (needs gunpart-pack)",
                 "black (needs gunpart-pack)"
             ))
         }
@@ -1734,7 +1734,7 @@ function Set-SelectedVariables {
     $MuzzleExtensionColorMap = @{
         # Striker compensator
         "silver chrome"         = "0"
-        "Silver more shiny"   = "1"
+        "Silver shiny (needs gunpart-pack)"   = "1"
 
         # Round Suppressor
         "black (white text)" = "0"
