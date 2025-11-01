@@ -1520,10 +1520,10 @@ function Set-SelectedVariables {
         Replace = "The Cherry Blossom Baller"
     }
     "The Concrete Bunny Pistol" =@{
-        Code = "c54ca8c7-8c29-4909-8390-3587e9747361"
+        Code = "0f991e64-354a-403a-afa5-b30285889377"
         LocalizationWeaponHSH = "006986A5A3F98191"
-        LocalizationTitleHSH = "80972231"
-        LocalizationDesc = "1363499925"
+        LocalizationTitleHSH = "2434870416"
+        LocalizationDesc = "3300392642"
         Replace = "The Concrete Bunny Pistol"
     }
     "The Floral Baller" =@{
