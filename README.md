@@ -44,3 +44,6 @@ v2.0
 - added import function
 - added merge customballer mods function
 - added gunpart-pack - renamed gunparts
+
+v2.1 
+- fixed "The concrete bunny pistol" to replace
