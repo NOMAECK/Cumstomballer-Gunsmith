@@ -1396,7 +1396,7 @@ function Set-SelectedVariables {
         Code = "e70adb5b-0646-4f88-bd4a-85bea7a2a654"
         LocalizationWeaponHSH = "0072D1A320470342"
         LocalizationTitleHSH = "257149234"
-        LocalizationDesc = "4188608219"
+        LocalizationDesc = "2200016056"
         Replace = "ICA19 Silverballer"
     }
         "Silverballer S2" =@{
@@ -1410,7 +1410,7 @@ function Set-SelectedVariables {
         Code = "341ba426-d52d-4ae3-97a9-40b9b3633d76"
         LocalizationWeaponHSH = "0072D1A320470342"
         LocalizationTitleHSH = "3915418648"
-        LocalizationDesc = "4188608219"
+        LocalizationDesc = "2235200364"
         Replace = "ICA19 Chrome"
     }
         "Black Lilly" =@{

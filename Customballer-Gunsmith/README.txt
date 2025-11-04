@@ -50,3 +50,4 @@ v1.4 - fixed that all customballers has the same picture. If you generate now a 
 v1.5 - added "Striker V3, "El Matador", "ICA19 F/A Stealth Ducky Edition", "Black Trinity", "Red Trinity", "White Trinity", "The Purple Streak ICA19","The Cherry Blossom Baller", "The Concrete Bunny Pistol", "The Floral Baller" and Customballer Gunsmith version number
 v2.0 - added import function - added merge customballer mods function - added gunpart-pack - renamed gunparts
 v2.1 - fixed "The concrete bunny pistol" to replace
+v2.2 - fixed wrong description localization of ICA19 Chrome and ICA19 Silverballer
