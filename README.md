@@ -47,3 +47,6 @@ v2.0
 
 v2.1 
 - fixed "The concrete bunny pistol" to replace
+
+v2.2 
+- fixed wrong description localization of ICA19 Chrome and ICA19 Silverballer
