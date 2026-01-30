@@ -1,14 +1,15 @@
 Instructions:
 1. start "Run-Customballer-Gunsmith.cmd"
-2. Select a pistol you want to replace with your own Customballer Mod or import your own customballer mod
+2. Select a gun you want to replace with your own Customballer Mod or import your own customballer mod
 3. Enter a new name for this weapon
 4. Choose your own Gunparts combination
 5. When you have selected everything, press the "Generate Mod" Button
 6. Start Simple Mod Framework and press "Add a Mod"
 7. Import your own Customballer Mod: "Customballer_Gunsmith\Customballer-Mods\"Your Gun Name.zip""
-8. Press "Apply"
-9. Enjoy
-10. Please post your own Customballer screenshots on my mod page. I want to see your creativity!
+8. Import Gun-Part-Pack
+9. Press "Apply"
+10. Enjoy
+11. Please post your own Customballer screenshots on my mod page. I want to see your creativity!
 
 Optional:
 If you want to merge your Customballer mods to your own Customballer Mod - Pack:
@@ -51,3 +52,4 @@ v1.5 - added "Striker V3, "El Matador", "ICA19 F/A Stealth Ducky Edition", "Blac
 v2.0 - added import function - added merge customballer mods function - added gunpart-pack - renamed gunparts
 v2.1 - fixed "The concrete bunny pistol" to replace
 v2.2 - fixed wrong description localization of ICA19 Chrome and ICA19 Silverballer
+v2.3 - added bullpup Snipers - added preview images of almost all gun parts
