@@ -15,7 +15,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 # Hauptfenster
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "Customballer Mod Pack Creator"
+$form.Text = "Customballer Gunsmith Mod Pack Creator"
 $form.Size = New-Object System.Drawing.Size(400,220)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = 'FixedDialog'
@@ -23,7 +23,7 @@ $form.MaximizeBox = $false
 
 # Label
 $label = New-Object System.Windows.Forms.Label
-$label.Text = "Enter a name for your Customballer Mod Pack:"
+$label.Text = "Enter a name for your Customballer Gunsmith Mod Pack:"
 $label.AutoSize = $true
 $label.Location = New-Object System.Drawing.Point(20,20)
 $form.Controls.Add($label)
@@ -61,7 +61,7 @@ $form.Controls.Add($statusLabel)
 
 # Button
 $button = New-Object System.Windows.Forms.Button
-$button.Text = "Select Costumballer Mods"
+$button.Text = "Select Costumballer Gunsmith Mods"
 $button.Location = New-Object System.Drawing.Point(20,110)
 $button.AutoSize = $true
 $form.Controls.Add($button)
@@ -131,7 +131,7 @@ Set-Content -Path $manifestPath -Value @"
  	"`$schema": "https://raw.githubusercontent.com/atampy25/simple-mod-framework/main/Mod%20Manager/src/lib/manifest-schema.json",	
 	"id": "${customnameNoSpaces}.CBG_NOMAECK",
 	"name": "${customnameUnderline}_CBG_NOMAECK",
-	"description": "User self created Customballer Mod-Pack created with NOMAECK's Customballer Gunsmith",
+	"description": "User self created Weapon Mod-Pack created with NOMAECK's Customballer Gunsmith",
 	"authors": ["NOMAECK"],
 	"frameworkVersion": "2.33.27",
 	"version": "1.0.0",
@@ -166,7 +166,7 @@ if (Test-Path $customModsPath) {
     $dialog = New-Object System.Windows.Forms.OpenFileDialog
     $dialog.InitialDirectory = $customModsPath
     $dialog.Filter = "ZIP Files (*.zip)|*.zip"
-    $dialog.Title = "Select one or more Customballer ZIP files to merge"
+    $dialog.Title = "Select one or more Mod ZIP files to merge"
     $dialog.Multiselect = $true
 
     $zipFiles = @()
@@ -242,341 +242,37 @@ if ($imports.Count -gt 0) {
     Add-Content -Path $manifestPath -Value $joinedImports
 }
 
-# === Nach Import prüfen, ob "group": "ICA19" vorkommt ===
+# === Groups automatisch erkennen und Selects erzeugen ===
 $manifestContent = Get-Content -Path $manifestPath -Raw
 
-if ($manifestContent -match '"group":\s*"ICA19"') {
-    Add-Content -Path $manifestPath -Value @"
-,
+$groups = [regex]::Matches(
+    $manifestContent,
+    '"group"\s*:\s*"([^"]+)"'
+) | ForEach-Object { $_.Groups[1].Value } |
+    Sort-Object -Unique
+
+if ($groups.Count -eq 0) {
+    Write-Host "⚠️ Keine Groups gefunden – fahre ohne Selects fort"
+} else {
+
+    Write-Host "🔎 Gefundene Groups:" -ForegroundColor Cyan
+    $groups | ForEach-Object { Write-Host " - $_" }
+
+    $selects = foreach ($group in $groups) {
+@"
+        ,
         {
-            "group": "ICA19",
+            "group": "$group",
             "name": "don't replace",
-            "tooltip": "ICA19",
+            "tooltip": "$group",
             "type": "select",
             "enabledByDefault": true
         }
 "@
+    }
+
+    Add-Content -Path $manifestPath -Value ($selects -join "`n")
 }
-# === Nach Import prüfen, ob "group": "ICA19 Silverballer" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_Silverballer"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_Silverballer",
-                "name": "don't replace",
-                "tooltip": "ICA19_Silverballer",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 Silverballer S2" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_Silverballer_S2"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_Silverballer_S2",
-                "name": "don't replace",
-                "tooltip": "ICA19_Silverballer_S2",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 Chrome" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_Chrome"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_Chrome",
-                "name": "don't replace",
-                "tooltip": "ICA19_Chrome",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 Black Lilly" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_Black_Lilly"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_Black_Lilly",
-                "name": "don't replace",
-                "tooltip": "ICA19_Black_Lilly",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 Goldballers" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_Goldballers"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_Goldballers",
-                "name": "don't replace",
-                "tooltip": "ICA19_Goldballers",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 Classicballer" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_Classicballer"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_Classicballer",
-                "name": "don't replace",
-                "tooltip": "ICA19_Classicballer",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 Shortballer" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_Shortballer"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_Shortballer",
-                "name": "don't replace",
-                "tooltip": "ICA19_Shortballer",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "Striker" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"Striker"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "Striker",
-                "name": "don't replace",
-                "tooltip": "Striker",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "Striker V3" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"Striker_V3"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "Striker_V3",
-                "name": "don't replace",
-                "tooltip": "Striker_V3",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "El Matador" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"El_Matador"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "El_Matador",
-                "name": "don't replace",
-                "tooltip": "El_Matador",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 F/A" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_F/A"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_F/A",
-                "name": "don't replace",
-                "tooltip": "ICA19_F/A",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 F/A Stealth" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_F/A_Stealth"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_F/A_Stealth",
-                "name": "don't replace",
-                "tooltip": "ICA19_F/A_Stealth",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "ICA19 F/A Stealth Ducky Edition" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"ICA19_F/A_Stealth_Ducky_Edition"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "ICA19_F/A_Stealth_Ducky_Edition",
-                "name": "don't replace",
-                "tooltip": "ICA19_F/A_Stealth_Ducky_Edition",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "Black Trinity" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"Black_Trinity"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "Black_Trinity",
-                "name": "don't replace",
-                "tooltip": "Black_Trinity",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "White Trinity" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"White_Trinity"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "White_Trinity",
-                "name": "don't replace",
-                "tooltip": "White_Trinity",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "Red Trinity" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"Red_Trinity"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "Red_Trinity",
-                "name": "don't replace",
-                "tooltip": "Red_Trinity",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "The Purple Streak ICA19" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"The_Purple_Streak_ICA19"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "The_Purple_Streak_ICA19",
-                "name": "don't replace",
-                "tooltip": "The_Purple_Streak_ICA19",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "The Cherry Blossom Baller" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"The_Cherry_Blossom_Baller"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "The_Cherry_Blossom_Baller",
-                "name": "don't replace",
-                "tooltip": "The_Cherry_Blossom_Baller",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "The Concrete Bunny Pistol" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"The_Concrete_Bunny_Pistol"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "The_Concrete_Bunny_Pistol",
-                "name": "don't replace",
-                "tooltip": "The_Concrete_Bunny_Pistol",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
-# === Nach Import prüfen, ob "group": "The Floral Baller" vorkommt ===
-$manifestContent = Get-Content -Path $manifestPath -Raw
-
-if ($manifestContent -match '"group":\s*"The_Floral_Baller"') {
-    Add-Content -Path $manifestPath -Value @"
-,
-            {
-                "group": "The_Floral_Baller",
-                "name": "don't replace",
-                "tooltip": "The_Floral_Baller",
-                "type": "select",
-                "enabledByDefault": true
-            }
-"@
-}
-
 
 
 # Manifest schließen
