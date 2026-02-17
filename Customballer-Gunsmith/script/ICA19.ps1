@@ -460,8 +460,10 @@ $cmbGrip.DropDownHeight = "600"
 $cmbGrip.Items.AddRange(@(
     "Standard",
     "Wood",
-    "Full ergo (black or brown)",
-    "Black"
+    "Full ergo (plastic)",
+    "Full ergo (wood brown)",
+    "Black",
+    "Full ergo light (gun part pack)"
     #"Spraypaint"
 ))
 $panel.Controls.Add($cmbGrip)
@@ -1087,7 +1089,12 @@ $cmbSlide.Add_SelectedIndexChanged({
             $cmbSlideColor.Items.AddRange(@(
                 "black",
                 "silver shiny",
-                "silver chrome"
+                "silver chrome",
+                "silver more shiny ",
+                "black kimber",
+                "silver shiny kimber",
+                "silver chrome kimber",
+                "silver more shiny kimber "
             ))
         }
         "Classic Insignia (needs gun-part-pack)" {
@@ -1134,10 +1141,23 @@ $cmbGrip.Add_SelectedIndexChanged({
                 "cherry brown",
                 "black snake",
                 "brown floral",
-                "cherry pink floral"
+                "cherry pink floral",
+                "dark brown (gun part pack)"
             ))
         }
-        "Full ergo (black or brown)" {
+        "Full ergo (plastic)" {
+            $cmbGripColor.Items.AddRange(@(
+                "black (matt screws)",
+                "black (shiny screws)"
+            ))
+            $lblGripCover.Enabled = $false
+            $cmbGripCover.Enabled = $false
+            $lblGripCoverColor.Enabled = $false
+            $cmbGripCoverColor.Enabled = $false
+            $cmbGripCover.SelectedIndex = -1
+            $cmbGripCoverColor.SelectedIndex = -1
+        }
+        "Full ergo (wood brown)" {
             $lblGripColor.Enabled = $false
             $cmbGripColor.Enabled = $false
             $lblGripCover.Enabled = $false
@@ -1152,6 +1172,13 @@ $cmbGrip.Add_SelectedIndexChanged({
             $cmbGripColor.Items.AddRange(@(
                 "black snake skin",
                 "black"
+            ))
+        }
+        "Full ergo light (gun part pack)" {
+            $cmbGripColor.Items.AddRange(@(
+                "black (matt screws)",
+                "black (shiny screws)"
+                #"brown"
             ))
         }
         "Spraypaint" {
@@ -1179,6 +1206,7 @@ $cmbGripCover.Add_SelectedIndexChanged({
             "black (black circle, white screw)",
             "black matt (silver circle, black screw)",
             "black big insignia"
+            #"ducky"
             ))
         }
         default {
@@ -1622,14 +1650,21 @@ function Set-SelectedVariables_ICA_19 {
         "cherry floral"                = "3"
         "silver more shiny"            = "2"
         "blue"                         = "3"
+        "silver more shiny " = "3"
+        "black kimber" = "4"
+        "silver shiny kimber" = "5"
+        "silver chrome kimber" = "6"
+        "silver more shiny kimber " = "7"
     }
 
         $GripMap = @{
         "Standard"       = "0"
         "Wood"           = "1"
-        "Full ergo (black or brown)" = "2"
+        "Full ergo (plastic)" = "2"
         "Black"          = "3"
+        "Full ergo (wood brown)" = "4"
         "Spraypaint"     = "5"
+        "Full ergo light (gun part pack)" = "6"
     }
 
     $GripColorMap = @{
@@ -1648,9 +1683,15 @@ function Set-SelectedVariables_ICA_19 {
         "black snake"              = "4"
         "brown floral"             = "5"
         "cherry pink floral"       = "6"
+        "dark brown (gun part pack)" = "7"
         "black snake skin"         = "0"
         "black"                    = "1"
         ""                         = "0"
+        "0" = "0"
+        "1" = "1"
+        "black (matt screws)" = "0"
+        "black (shiny screws)" = "1"
+        "brown" = "2"
     }
 
     $GripCoverMap = @{
@@ -1664,6 +1705,7 @@ function Set-SelectedVariables_ICA_19 {
         "black (black circle, white screw)"  = "2"
         "black matt (silver circle, black screw)"                           = "3"
         "black big insignia"                   = "4"
+        "ducky" = "5"
 
     }
 

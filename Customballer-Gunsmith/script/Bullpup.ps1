@@ -1371,44 +1371,7 @@ $panelLabelDonation.BorderStyle = "FixedSingle"
 $panelLabelDonation.BackColor = [System.Drawing.Color]::White
 $panel1.Controls.Add($panelLabelDonation)
 
-if ($updateAvailable) {
-    # --- Update-Hinweis ---
-    $lblUpdate = New-Object System.Windows.Forms.Label
-    $lblUpdate.Text = "New update available! (v$localVersion → v$remoteVersion)"
-    $lblUpdate.AutoSize = $true
-    $lblUpdate.Font = New-Object System.Drawing.Font("Segoe UI",10,[System.Drawing.FontStyle]::Bold)
-    $lblUpdate.ForeColor = [System.Drawing.Color]::Red
-    $lblUpdate.Location = New-Object System.Drawing.Point(250,10)
-    $panelLabelDonation.Controls.Add($lblUpdate)
 
-    # --- Download-Button ---
-    $btnDownload = New-Object System.Windows.Forms.Button
-    $btnDownload.Text = "Download"
-    $btnDownload.Location = New-Object System.Drawing.Point(320,35)
-    
-       $btnDownload.Add_Click({
-    # Button deaktivieren
-    $btnDownload.Enabled = $false
-    $lblUpdate.Text = "Downloading update..."
-
-    # GUI sauber schließen
-    $Form.Close()
-
-    # Starte das Update-Script in eigenem Prozess
-    $updateScriptPath = Join-Path $scriptDir "script\newupdate.ps1"
-    Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$updateScriptPath`""
-
-    # Haupt-Thread beenden ohne ExitException
-    return
-})
-
-
-
-
-    
-    $panelLabelDonation.Controls.Add($btnDownload)
-}
-else {
     # --- Standard Donation ---
     $lblDonation = New-Object System.Windows.Forms.Label
     $lblDonation.Text = "You’re not a fan of unpaid work? Then support my amazing tool — buy me a coffee! :)"
@@ -1426,4 +1389,3 @@ else {
         Start-Process $e.Link.LinkData
     })
     $panelLabelDonation.Controls.Add($linkLabel)
-}
