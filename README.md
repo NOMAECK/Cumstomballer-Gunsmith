@@ -50,4 +50,9 @@ v2.1
 
 v2.2 
 - fixed wrong description localization of ICA19 Chrome and ICA19 Silverballer
-- v2.3 - added bullpup Snipers - added preview images of almost all gun parts
+
+v2.3 
+- added bullpup Snipers - added preview images of almost all gun parts
+
+v2.4
+- fixed full ergo grip - added full ergo light grip - added dark Brown Wood grip - added Insignia striker Kimber slide
